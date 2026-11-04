@@ -29,7 +29,10 @@ window.HOMEPAGE = {
       {
         school: { zh: '学校名称', en: 'University Name' },
         degree: { zh: '专业名称 · 学位阶段', en: 'Your Major · Degree' },
-        period: { zh: '入学年份 — 预计毕业年份', en: 'Start year — Expected graduation' }
+        period: { zh: '入学年份 — 预计毕业年份', en: 'Start year — Expected graduation' },
+        logo: 'assets/university.svg',
+        url: '',
+        details: []
       }
     ]
   },
@@ -56,10 +59,10 @@ window.HOMEPAGE = {
       date: '2026.09',
       datetime: '2026-09',
       text: {
-        zh: '示例动态 · 整理新的阅读笔记。',
-        en: 'Example update · Collecting new reading notes.'
+        zh: '示例动态 · 记录生活中的片段。',
+        en: 'Example update · Collecting moments from everyday life.'
       },
-      target: 'more'
+      target: 'life'
     }
   ],
   publications: [
@@ -209,56 +212,24 @@ window.HOMEPAGE = {
       ]
     }
   ],
-  more: {
-    intro: {
-      zh: '笔记、摄影与生活中的小发现。',
-      en: 'Notes, photographs, and small discoveries along the way.'
-    },
-    photo: 'assets/campus.png',
-    photoAlt: {
-      zh: '阳光下的校园与树影，示意图片',
-      en: 'An illustrative sunlit campus with leafy trees'
-    },
-    photoCaption: {
-      zh: '校园与日常 · AI 生成的示意图片',
-      en: 'Campus moments · AI-generated illustrative image'
-    },
-    writings: [
-      {
-        id: 'note-a',
-        title: { zh: '一次关于学习方法的整理', en: 'A note on how I learn' },
-        date: '2026.11',
-        intro: {
-          zh: '文章示例 · 这里可以分享你的学习过程、理解和思考。',
-          en: 'Example note · A place to share your learning process and reflections.'
-        },
-        paragraphs: [
-          {
-            zh: '这是一个文章位置示例。你可以把已有的学习笔记、项目复盘或阅读记录整理到这里。',
-            en: 'This is a sample article slot. Add a learning note, project reflection, or reading journal of your own here.'
-          },
-          {
-            zh: '一篇笔记可以从具体问题开始，再介绍你的理解过程、遇到的困难和最终收获。为需要进一步阅读的内容附上来源链接，会让记录更容易被使用。',
-            en: 'A note can begin with a concrete question, followed by your reasoning, challenges, and what you learned. Add source links when readers may want to explore further.'
-          }
-        ]
+  life: {
+    football: {
+      description: {
+        zh: '踢球、看球，也记录与足球有关的片段。',
+        en: 'Playing, watching, and collecting moments from the beautiful game.'
       },
-      {
-        id: 'note-b',
-        title: { zh: '校园里的秋日随记', en: 'Little moments on campus' },
-        date: '2026.10',
-        intro: {
-          zh: '生活记录示例 · 给研究和项目之外的日常留一点空间。',
-          en: 'Example journal · A little space for life beyond research and projects.'
-        },
-        paragraphs: [
-          {
-            zh: '这里可以放摄影、运动、阅读或日常观察。选择你愿意公开分享的片段，慢慢积累成自己的记录。',
-            en: 'Share photographs, running, books, or everyday observations. Choose moments you would like to make public and build a journal over time.'
-          }
-        ]
+      photo: 'assets/football.svg',
+      photoAlt: { zh: '蓝色足球场示意图', en: 'An illustrative blue football pitch' },
+      caption: {
+        zh: '足球记录将在整理后更新。',
+        en: 'Football stories will be added here.'
       }
-    ],
-    experiences: []
+    },
+    travel: {
+      // Province names or six-digit administrative codes, for example '浙江省' or '330000'.
+      visitedProvinces: [],
+      // Country names or three-letter ISO codes, for example '日本' or 'JPN'.
+      visitedCountries: []
+    }
   }
 };

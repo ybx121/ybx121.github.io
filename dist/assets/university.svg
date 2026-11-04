@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="院校标识占位图">
+  <circle cx="40" cy="40" r="38" fill="#edf4fc"/>
+  <g fill="none" stroke="#7097bf" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m17 31 23-12 23 12H17Zm5 4v23m12-23v23m12-23v23m12-23v23M16 60h48M13 65h54"/>
+  </g>
+</svg>

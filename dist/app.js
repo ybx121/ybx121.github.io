@@ -8,7 +8,10 @@
       news: '近期动态',
       research: '科研',
       projects: '精选项目',
-      more: '更多',
+      life: '生活',
+      football: '足球',
+      travel: '旅行',
+      navEducation: '教育',
       navNews: '动态',
       navProjects: '项目',
       interests: '研究兴趣',
@@ -34,9 +37,9 @@
       emptyProjects: '项目将在整理完成后更新。',
       image: '图片',
       projectExample: '示例项目',
-      note: '笔记',
       cvExample: '简历示例 · 待替换为个人经历',
-      education: '教育背景',
+      education: '教育经历',
+      emptyEducation: '教育经历将在补充后更新。',
       publications: '发表论文',
       cvProjects: '项目经历',
       contact: '联系方式',
@@ -51,7 +54,10 @@
       news: 'Recent news',
       research: 'Research',
       projects: 'Selected projects',
-      more: 'More',
+      life: 'Life',
+      football: 'Football',
+      travel: 'Travel',
+      navEducation: 'Education',
       navNews: 'News',
       navProjects: 'Projects',
       interests: 'Research interests',
@@ -77,9 +83,9 @@
       emptyProjects: 'Projects will be added here.',
       image: 'Image',
       projectExample: 'Example project',
-      note: 'Notes',
       cvExample: 'Example CV · Replace with your own experience',
       education: 'Education',
+      emptyEducation: 'Education details will be added here.',
       publications: 'Publications',
       cvProjects: 'Projects',
       contact: 'Contact',
@@ -102,6 +108,7 @@
   let observer;
   let toastTimer;
   let currentDialog = null;
+  const travelState = { view: 'china', selected: { china: '', world: '' } };
 
   function initialLanguage() {
     const query = new URLSearchParams(window.location.search).get('lang');
@@ -284,20 +291,53 @@
       </section>`;
   }
 
-  function renderMore() {
-    const more = content.more || {};
-    const writings = more.writings || [];
+  function renderEducation() {
+    const ui = labels[language];
+    const education = content.profile.education || [];
     return `
-      <section class="content-section" id="more">
-        ${heading(labels[language].more)}
-        <p class="more-intro">${escape(text(more.intro))}</p>
-        <div class="more-layout">
-          ${more.photo ? `<button class="life-photo" type="button" data-action="life-photo" aria-label="${escape(text(more.photoAlt))}"><img src="${escape(more.photo)}" alt="${escape(text(more.photoAlt))}" width="600" height="286" loading="lazy"></button>` : ''}
-          <ul class="writing-list">
-            ${writings.map((writing) => `<li><button class="text-button" type="button" data-action="note" data-id="${escape(writing.id)}">${escape(text(writing.title))}${icon('arrow')}</button></li>`).join('')}
-          </ul>
+      <section class="content-section" id="education">
+        ${heading(ui.education)}
+        ${
+          education.length
+            ? `<div class="education-list">${education
+                .map(
+                  (entry) => `
+          <article class="education-entry">
+            <p class="education-period">${escape(text(entry.period))}</p>
+            <div class="education-content">
+              <div class="education-institution">
+                ${entry.logo ? `<img class="education-logo" src="${escape(entry.logo)}" alt="${escape(text(entry.school))}" width="48" height="48" loading="lazy">` : icon('academic')}
+                <h3>${entry.url ? resourceLink(text(entry.school), entry.url) : escape(text(entry.school))}</h3>
+              </div>
+              <p class="education-degree">${escape(text(entry.degree))}</p>
+              ${(entry.details || []).map((detail) => `<p class="education-detail">${escape(text(detail))}</p>`).join('')}
+            </div>
+          </article>`
+                )
+                .join('')}</div>`
+            : `<p class="empty-copy">${escape(ui.emptyEducation)}</p>`
+        }
+      </section>`;
+  }
+
+  function renderLife() {
+    const ui = labels[language];
+    const football = content.life?.football || {};
+    return `
+      <section class="content-section" id="life">
+        <span class="anchor-alias" id="more" aria-hidden="true"></span>
+        ${heading(ui.life)}
+        <div class="life-interest football-interest">
+          <h3 class="interest-heading">${escape(ui.football)}</h3>
+          <div class="football-layout">
+            ${football.photo ? `<button class="life-photo" type="button" data-action="football-photo" aria-label="${escape(text(football.photoAlt))}"><img src="${escape(football.photo)}" alt="${escape(text(football.photoAlt))}" width="600" height="290" loading="lazy"></button>` : ''}
+            <p>${escape(text(football.description))}</p>
+          </div>
         </div>
-        ${(more.experiences || []).length ? `<div class="optional-experiences">${more.experiences.map((item) => `<div><h3>${escape(text(item.title))}</h3><p>${escape(text(item.description))}</p></div>`).join('')}</div>` : ''}
+        <div class="life-interest travel-interest">
+          <h3 class="interest-heading">${escape(ui.travel)}</h3>
+          <div id="travel-map"></div>
+        </div>
       </section>`;
   }
 
@@ -321,11 +361,18 @@
       ['news', ui.navNews],
       ['research', ui.research],
       ['projects', ui.navProjects],
-      ['more', ui.more]
+      ['education', ui.navEducation],
+      ['life', ui.life]
     ]
       .map(([id, label]) => `<a href="#${id}" data-section="${id}">${escape(label)}</a>`)
       .join('');
-    mainElement.innerHTML = renderNews() + renderResearch() + renderProjects() + renderMore();
+    mainElement.innerHTML =
+      renderNews() + renderResearch() + renderProjects() + renderEducation() + renderLife();
+    window.HomepageTravel.mount(document.getElementById('travel-map'), {
+      language,
+      visits: content.life?.travel || {},
+      state: travelState
+    });
     mainElement.setAttribute('aria-busy', 'false');
     document.getElementById('footer').innerHTML = `
       <p>${escape(ui.motto)}</p>
@@ -342,22 +389,20 @@
   function observeSections() {
     observer?.disconnect();
     if (!('IntersectionObserver' in window)) return;
+    const sections = [...document.querySelectorAll('.main-content > section')];
     observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          const section = entry.target.id;
-          document.querySelectorAll('[data-section]').forEach((link) => {
-            if (link.dataset.section === section) link.setAttribute('aria-current', 'location');
-            else link.removeAttribute('aria-current');
-          });
-        }
+      () => {
+        const active =
+          [...sections].reverse().find((section) => section.getBoundingClientRect().top <= 200) ||
+          sections[0];
+        document.querySelectorAll('[data-section]').forEach((link) => {
+          if (link.dataset.section === active?.id) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
       },
       { rootMargin: '-80px 0px -58% 0px', threshold: 0 }
     );
-    document
-      .querySelectorAll('.main-content > section')
-      .forEach((section) => observer.observe(section));
+    sections.forEach((section) => observer.observe(section));
   }
 
   function setLanguage(next) {
@@ -444,13 +489,6 @@
         <pre class="citation-text">${escape(item.bibtex)}</pre>
         <div class="dialog-actions"><button class="print-button" type="button" data-action="copy-citation" data-id="${escape(item.id)}">${icon('copy')}${escape(ui.copyCitation)}</button></div>`;
     }
-    if (type === 'note') {
-      dialogContent.innerHTML = `
-        <p class="dialog-kicker">${escape(ui.note)} · ${escape(item.date)}</p>
-        <h2 id="dialog-title">${escape(text(item.title))}</h2>
-        <p class="dialog-lead">${escape(text(item.intro))}</p>
-        <div class="dialog-section">${(item.paragraphs || []).map((paragraph) => `<p>${escape(text(paragraph))}</p>`).join('')}</div>`;
-    }
     if (type === 'image') {
       dialogContent.innerHTML = `
         <h2 id="dialog-title">${escape(text(item.title))}</h2>
@@ -508,16 +546,13 @@
           caption: paper.summary
         });
     }
-    if (action === 'note') {
-      const writing = content.more.writings.find((item) => item.id === id);
-      if (writing) openDialog('note', writing);
-    }
-    if (action === 'life-photo') {
+    if (action === 'football-photo') {
+      const football = content.life.football;
       openDialog('image', {
-        title: ui.more,
-        image: content.more.photo,
-        alt: content.more.photoAlt,
-        caption: content.more.photoCaption
+        title: ui.football,
+        image: football.photo,
+        alt: football.photoAlt,
+        caption: football.caption
       });
     }
     if (action === 'news') {
@@ -562,7 +597,9 @@
 
   render();
   const initialSection = window.location.hash.slice(1);
-  if (['about', 'news', 'research', 'projects', 'more'].includes(initialSection)) {
+  if (
+    ['about', 'news', 'research', 'projects', 'education', 'life', 'more'].includes(initialSection)
+  ) {
     requestAnimationFrame(() => document.getElementById(initialSection)?.scrollIntoView());
   }
 })();
