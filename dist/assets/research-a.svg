@@ -1,0 +1,54 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 720 320"
+  role="img"
+  aria-label="示例方法框架图"
+>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1">
+      <stop stop-color="#f4f8ff" />
+      <stop offset="1" stop-color="#eef5ff" />
+    </linearGradient>
+    <linearGradient id="layer" x2="1" y2="1">
+      <stop stop-color="#c4e0fb" stop-opacity=".9" />
+      <stop offset="1" stop-color="#7eb1e5" stop-opacity=".55" />
+    </linearGradient>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="m1 1 5 3-5 3" fill="none" stroke="#668cb5" stroke-width="1.4" />
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="8" fill="url(#bg)" />
+  <g fill="url(#layer)" stroke="#a8d0f4" stroke-width="1">
+    <path d="m49 111 50-34v153l-50 34z" />
+    <path d="m81 103 50-34v153l-50 34z" />
+    <path d="m113 95 50-34v153l-50 34z" />
+    <path d="m145 87 50-34v153l-50 34z" />
+  </g>
+  <path d="M217 159h58M455 159h56" stroke="#668cb5" stroke-width="2" marker-end="url(#arrow)" />
+  <rect
+    x="293"
+    y="85"
+    width="144"
+    height="146"
+    rx="18"
+    fill="#f7fbff"
+    stroke="#8db7e6"
+    stroke-width="2"
+  />
+  <g fill="none" stroke="#9fc2e6" stroke-width="2">
+    <path d="m326 178 34-56 43 29-15 45-62-18m34-56 28 74m15-45-77 27" />
+  </g>
+  <g fill="#79a8db">
+    <circle cx="326" cy="178" r="11" />
+    <circle cx="360" cy="122" r="11" />
+    <circle cx="403" cy="151" r="11" />
+    <circle cx="388" cy="196" r="11" />
+  </g>
+  <g fill="url(#layer)" stroke="#a8d0f4">
+    <path d="m534 125 32-22v127l-32 22z" />
+    <path d="m557 113 32-22v127l-32 22z" />
+    <path d="m580 101 32-22v127l-32 22z" />
+    <path d="m603 89 32-22v127l-32 22z" />
+    <path d="m626 77 32-22v127l-32 22z" />
+  </g>
+</svg>

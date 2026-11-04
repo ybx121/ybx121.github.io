@@ -1,0 +1,28 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 900 400"
+  role="img"
+  aria-label="蓝色山峦项目封面"
+>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1">
+      <stop stop-color="#e1efff" />
+      <stop offset="1" stop-color="#f0f7ff" />
+    </linearGradient>
+    <linearGradient id="front" x2="1" y2="1">
+      <stop stop-color="#92c1eb" />
+      <stop offset="1" stop-color="#6a9fd0" />
+    </linearGradient>
+  </defs>
+  <rect width="900" height="400" fill="url(#sky)" />
+  <path
+    d="M0 256C103 241 162 121 261 164s141 84 214 36S630 81 711 124s116 71 189 15v261H0Z"
+    fill="#c5dff8"
+  />
+  <path
+    d="M0 238c97-61 139-35 234 14s139 42 237 15 181-90 258-72 111 24 171 8v197H0Z"
+    fill="#b3d4f2"
+  />
+  <path d="M0 326c153-15 204-71 330-67s164 59 291 25S779 195 900 235v165H0Z" fill="#9ec6eb" />
+  <path d="M0 362c142-57 251-35 368-15s179-17 293-49 167-28 239-7v109H0Z" fill="url(#front)" />
+</svg>
