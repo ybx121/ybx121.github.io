@@ -45,6 +45,8 @@ npm run dev
 
 `.github/workflows/pages.yml` 会在 `main` 分支收到提交后检查 JavaScript 语法并自动发布。仓库 Settings → Pages → Build and deployment → Source 应保持为 **GitHub Actions**，无需将 `dist/` 的文件再手动复制到仓库根目录。
 
+发布包按工作流运行编号和重试次数命名，上传与部署步骤使用同一名称，避免重试时出现多个同名发布包。
+
 修改 `styles.css`、`content.js` 或 `app.js` 后，同步更新 `dist/index.html` 中对应样式或脚本 URL 的 `v` 版本标记，使浏览器及时加载更新后的文件。
 
 后续更新时，在本目录先运行：
