@@ -522,6 +522,18 @@ ul {
   align-items: center;
   gap: 13px;
 }
+.education-heading {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+.education-status {
+  color: var(--muted);
+  font-size: 12px;
+}
 .education-logo {
   width: 46px;
   height: 46px;
@@ -566,6 +578,13 @@ ul {
   font-size: 14px;
   line-height: 1.9;
   color: #5d738e;
+}
+.football-layout:not(:has(.life-photo)) {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.football-caption {
+  grid-column: 1 / -1;
 }
 
 /* Local boundary maps. Visit history is read only on the public page. */

@@ -7,7 +7,7 @@
       about: '关于',
       news: '近期动态',
       research: '科研',
-      projects: '精选项目',
+      projects: '项目',
       life: '生活',
       football: '足球',
       travel: '旅行',
@@ -16,7 +16,7 @@
       navProjects: '项目',
       interests: '研究兴趣',
       resume: '简历',
-      example: '示例资料 · 待替换',
+      example: '部分资料待完善',
       copyEmail: '复制邮箱',
       copied: '已复制',
       copyFailed: '暂时无法复制，请手动选择文本。',
@@ -37,7 +37,7 @@
       emptyProjects: '项目将在整理完成后更新。',
       image: '图片',
       projectExample: '示例项目',
-      cvExample: '简历示例 · 待替换为个人经历',
+      cvExample: '简历草稿 · 部分资料待完善',
       education: '教育经历',
       emptyEducation: '教育经历将在补充后更新。',
       publications: '发表论文',
@@ -46,14 +46,14 @@
       print: '打印 / 保存 PDF',
       updated: '更新于',
       motto: '保持好奇，持续探索。',
-      footerExample: '头像、论文和项目均为示例内容',
+      footerExample: '头像与部分个人资料待完善',
       siteTitle: '科研与项目'
     },
     en: {
       about: 'About',
       news: 'Recent news',
       research: 'Research',
-      projects: 'Selected projects',
+      projects: 'Projects',
       life: 'Life',
       football: 'Football',
       travel: 'Travel',
@@ -62,7 +62,7 @@
       navProjects: 'Projects',
       interests: 'Research interests',
       resume: 'CV',
-      example: 'Example profile · To be personalized',
+      example: 'Some profile details are still to be added',
       copyEmail: 'Copy email',
       copied: 'Copied',
       copyFailed: 'Copy is unavailable. Please select the text manually.',
@@ -83,7 +83,7 @@
       emptyProjects: 'Projects will be added here.',
       image: 'Image',
       projectExample: 'Example project',
-      cvExample: 'Example CV · Replace with your own experience',
+      cvExample: 'CV draft · Some details are still to be added',
       education: 'Education',
       emptyEducation: 'Education details will be added here.',
       publications: 'Publications',
@@ -92,7 +92,7 @@
       print: 'Print / Save as PDF',
       updated: 'Updated',
       motto: 'Stay curious. Keep exploring.',
-      footerExample: 'Illustrative avatar, publications, and projects',
+      footerExample: 'Portrait and some profile details are still placeholders',
       siteTitle: 'Research & Projects'
     }
   };
@@ -218,7 +218,7 @@
     return `
       <section class="content-section" id="news">
         ${heading(ui.news)}
-        ${news.length ? `<ul class="news-list">${items}</ul>` : `<p class="empty-copy">${escape(ui.emptyNews)}</p>`}
+        ${news.length ? `<ul class="news-list">${items}</ul>` : ''}
         ${news.length > 6 ? `<button class="text-button news-more" type="button" data-action="news" aria-expanded="${expandedNews}">${escape(expandedNews ? ui.showLess : ui.showAll)}</button>` : ''}
       </section>`;
   }
@@ -257,7 +257,7 @@
     return `
       <section class="content-section" id="research">
         ${heading(ui.research, language === 'zh' ? 'Publications' : '')}
-        ${papers.length ? `<div class="publication-list">${papers.map(renderPublication).join('')}</div>` : `<p class="empty-copy">${escape(ui.emptyPapers)}</p>`}
+        ${papers.length ? `<div class="publication-list">${papers.map(renderPublication).join('')}</div>` : ''}
       </section>`;
   }
 
@@ -287,7 +287,7 @@
     return `
       <section class="content-section" id="projects">
         ${heading(ui.projects)}
-        ${projects.length ? `<div class="project-list">${projects.map(renderProject).join('')}</div>` : `<p class="empty-copy">${escape(ui.emptyProjects)}</p>`}
+        ${projects.length ? `<div class="project-list">${projects.map(renderProject).join('')}</div>` : ''}
       </section>`;
   }
 
@@ -303,11 +303,14 @@
                 .map(
                   (entry) => `
           <article class="education-entry">
-            <p class="education-period">${escape(text(entry.period))}</p>
+            <p class="education-period">${escape(text(entry.period)).replaceAll(' — ', '<br>— ')}</p>
             <div class="education-content">
               <div class="education-institution">
                 ${entry.logo ? `<img class="education-logo" src="${escape(entry.logo)}" alt="${escape(text(entry.school))}" width="48" height="48" loading="lazy">` : icon('academic')}
-                <h3>${entry.url ? resourceLink(text(entry.school), entry.url) : escape(text(entry.school))}</h3>
+                <div class="education-heading">
+                  <h3>${entry.url ? resourceLink(text(entry.school), entry.url) : escape(text(entry.school))}</h3>
+                  ${text(entry.status) ? `<p class="education-status">${escape(text(entry.status))}</p>` : ''}
+                </div>
               </div>
               <p class="education-degree">${escape(text(entry.degree))}</p>
               ${(entry.details || []).map((detail) => `<p class="education-detail">${escape(text(detail))}</p>`).join('')}
@@ -329,10 +332,11 @@
         ${heading(ui.life)}
         <div class="life-interest football-interest">
           <h3 class="interest-heading">${escape(ui.football)}</h3>
-          <div class="football-layout">
+          ${football.photo || text(football.description).trim() || text(football.caption).trim() ? `<div class="football-layout">
             ${football.photo ? `<button class="life-photo" type="button" data-action="football-photo" aria-label="${escape(text(football.photoAlt))}"><img src="${escape(football.photo)}" alt="${escape(text(football.photoAlt))}" width="600" height="290" loading="lazy"></button>` : ''}
-            <p>${escape(text(football.description))}</p>
-          </div>
+            ${text(football.description).trim() ? `<p>${escape(text(football.description))}</p>` : ''}
+            ${text(football.caption).trim() ? `<p class="football-caption">${escape(text(football.caption))}</p>` : ''}
+          </div>` : ''}
         </div>
         <div class="life-interest travel-interest">
           <h3 class="interest-heading">${escape(ui.travel)}</h3>
