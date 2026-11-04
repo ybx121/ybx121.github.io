@@ -105,7 +105,8 @@
   const topButton = document.getElementById('back-to-top');
   let language = initialLanguage();
   let expandedNews = false;
-  let observer;
+  let navigationFrame = 0;
+  let pinnedSection = '';
   let toastTimer;
   let currentDialog = null;
   const travelState = { view: 'china', selected: { china: '', world: '' } };
@@ -361,7 +362,6 @@
     const nav = document.getElementById('main-nav');
     nav.setAttribute('aria-label', ui.nav);
     nav.innerHTML = [
-      ['about', ui.about],
       ['news', ui.navNews],
       ['research', ui.research],
       ['projects', ui.navProjects],
@@ -380,33 +380,51 @@
     mainElement.setAttribute('aria-busy', 'false');
     document.getElementById('footer').innerHTML = `
       <p>${escape(ui.motto)}</p>
-      <p class="footer-note">${escape(ui.updated + ' ' + text(content.updated))}${content.exampleMode ? ' · ' + escape(ui.footerExample) : ''}</p>`;
+      <p class="footer-note">${escape(ui.updated + ' ' + text(content.updated))}</p>`;
     document.querySelectorAll('[data-language]').forEach((button) => {
       button.setAttribute('aria-pressed', String(button.dataset.language === language));
     });
     document.getElementById('dialog-close').setAttribute('aria-label', ui.close);
     topButton.setAttribute('aria-label', ui.top);
     if (dialog.open && currentDialog) renderDialog();
-    observeSections();
+    updateNavigation();
   }
 
-  function observeSections() {
-    observer?.disconnect();
-    if (!('IntersectionObserver' in window)) return;
+  function updateNavigation() {
     const sections = [...document.querySelectorAll('.main-content > section')];
-    observer = new IntersectionObserver(
-      () => {
-        const active =
-          [...sections].reverse().find((section) => section.getBoundingClientRect().top <= 200) ||
-          sections[0];
-        document.querySelectorAll('[data-section]').forEach((link) => {
-          if (link.dataset.section === active?.id) link.setAttribute('aria-current', 'location');
-          else link.removeAttribute('aria-current');
-        });
-      },
-      { rootMargin: '-80px 0px -58% 0px', threshold: 0 }
-    );
-    sections.forEach((section) => observer.observe(section));
+    // Use the same offset as anchor scrolling, including responsive header spacing.
+    const anchorTop = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const atBottom =
+      window.scrollY > 0 &&
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+    const active =
+      sections.find((section) => section.id === pinnedSection) ||
+      (atBottom ? sections[sections.length - 1] : null) ||
+      [...sections].reverse().find((section) => section.getBoundingClientRect().top <= anchorTop + 2) ||
+      sections[0];
+    document.querySelectorAll('[data-section]').forEach((link) => {
+      if (link.dataset.section === active?.id) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  function queueNavigationUpdate() {
+    if (navigationFrame) return;
+    navigationFrame = requestAnimationFrame(() => {
+      navigationFrame = 0;
+      updateNavigation();
+    });
+  }
+
+  function pinNavigation(sectionId) {
+    // Keep the clicked section selected while smooth scrolling or at the page end.
+    pinnedSection = sectionId === 'more' ? 'life' : sectionId === 'about' ? 'news' : sectionId;
+    updateNavigation();
+  }
+
+  function releaseNavigation() {
+    pinnedSection = '';
+    queueNavigationUpdate();
   }
 
   function setLanguage(next) {
@@ -510,9 +528,15 @@
   }
 
   document.addEventListener('click', (event) => {
+    const navigationLink = event.target.closest('#main-nav a[data-section]');
+    if (navigationLink && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
+      pinNavigation(navigationLink.dataset.section);
+      return;
+    }
     const aboutLink = event.target.closest('a[href="#about"]');
     if (aboutLink) {
       event.preventDefault();
+      pinNavigation('news');
       window.scrollTo({
         top: 0,
         behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
@@ -586,6 +610,7 @@
       dialog.close();
   });
   topButton.addEventListener('click', () => {
+    pinNavigation('news');
     window.scrollTo({
       top: 0,
       behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
@@ -595,15 +620,33 @@
     'scroll',
     () => {
       topButton.hidden = window.scrollY < 650;
+      queueNavigationUpdate();
     },
     { passive: true }
   );
+  window.addEventListener('resize', queueNavigationUpdate);
+  window.addEventListener('hashchange', () => pinNavigation(window.location.hash.slice(1)));
+  // Resume position-based highlighting when the reader starts scrolling manually.
+  ['wheel', 'touchmove'].forEach((type) => {
+    window.addEventListener(type, releaseNavigation, { passive: true });
+  });
+  window.addEventListener('pointerdown', (event) => {
+    if (event.target === document.documentElement) releaseNavigation();
+  }, { passive: true });
+  window.addEventListener('keydown', (event) => {
+    if (
+      !event.defaultPrevented &&
+      !dialog.open &&
+      ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)
+    ) releaseNavigation();
+  });
 
   render();
   const initialSection = window.location.hash.slice(1);
   if (
     ['about', 'news', 'research', 'projects', 'education', 'life', 'more'].includes(initialSection)
   ) {
+    pinNavigation(initialSection);
     requestAnimationFrame(() => document.getElementById(initialSection)?.scrollIntoView());
   }
 })();
