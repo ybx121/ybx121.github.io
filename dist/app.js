@@ -160,9 +160,25 @@
     return `<div class="section-heading"><h2>${escape(title)}</h2>${secondary ? `<span class="section-english" lang="en">${escape(secondary)}</span>` : ''}</div>`;
   }
 
+  function visibleEmails() {
+    const profile = content.profile;
+    if (Array.isArray(profile.emails)) {
+      return profile.emails
+        .filter((email) => email.visible !== false && email.address)
+        .map((email) => email.address);
+    }
+    return profile.email ? [profile.email] : [];
+  }
+
   function renderProfile() {
     const profile = content.profile;
     const ui = labels[language];
+    const emailLinks = visibleEmails().map((email) => `
+      <div class="contact-row">
+        ${icon('mail')}
+        <a href="mailto:${escape(email)}">${escape(email)}</a>
+        <button type="button" class="icon-button copy-email" data-action="copy-email" data-email="${escape(email)}" aria-label="${escape(ui.copyEmail)}" title="${escape(ui.copyEmail)}">${icon('copy')}</button>
+      </div>`).join('');
     const socialLinks = (profile.socials || [])
       .map(
         (social) => `
@@ -192,11 +208,7 @@
         <div class="interest-list">${(profile.interests || []).map((interest) => `<span>${escape(text(interest))}</span>`).join('')}</div>
       </div>
       <div class="profile-contacts">
-        <div class="contact-row">
-          ${icon('mail')}
-          <a href="mailto:${escape(profile.email)}">${escape(profile.email)}</a>
-          <button type="button" class="icon-button copy-email" data-action="copy-email" aria-label="${escape(ui.copyEmail)}" title="${escape(ui.copyEmail)}">${icon('copy')}</button>
-        </div>
+        ${emailLinks}
         ${socialLinks}
       </div>
       <div class="profile-actions">${resume}</div>`;
@@ -487,7 +499,7 @@
         ${content.exampleMode ? `<p class="dialog-kicker">${escape(ui.cvExample)}</p>` : ''}
         <h2 id="dialog-title">${escape(text(profile.name))}</h2>
         <p class="cv-subtitle">${escape(text(profile.role))}</p>
-        <p class="cv-subtitle">${escape(profile.email)}</p>
+        ${visibleEmails().map((email) => `<p class="cv-subtitle">${escape(email)}</p>`).join('')}
       </div>
       <section class="cv-section"><h3>${escape(ui.education)}</h3>
         ${(profile.education || []).map((item) => `<div class="cv-entry"><h4>${escape(text(item.school))}</h4><p>${escape(text(item.degree))}</p><p>${escape(text(item.period))}</p></div>`).join('')}
@@ -554,7 +566,7 @@
     const ui = labels[language];
     if (action === 'missing')
       toast(button.dataset.label + ' · ' + ui.missing + ' · ' + ui.missingHint);
-    if (action === 'copy-email') copy(content.profile.email);
+    if (action === 'copy-email') copy(button.dataset.email);
     if (action === 'resume') openDialog('resume');
     if (action === 'print') window.print();
     if (action === 'project') {

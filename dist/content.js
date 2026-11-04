@@ -24,7 +24,10 @@ window.HOMEPAGE = {
       { zh: '方向 A', en: 'Research area A' },
       { zh: '方向 B', en: 'Research area B' }
     ],
-    email: 'hello@example.com',
+    emails: [
+      { address: 'yangbx12023@shanghaitech.edu.cn', visible: false },
+      { address: 'yang_061@sina.com', visible: true }
+    ],
     socials: [
       { label: { zh: 'GitHub', en: 'GitHub' }, icon: 'github', url: 'https://github.com/ybx121' },
       { label: { zh: '学术账号', en: 'Scholar' }, icon: 'academic', url: '' }
