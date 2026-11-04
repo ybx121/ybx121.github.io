@@ -39,6 +39,7 @@
       projectExample: '示例项目',
       cvExample: '简历草稿 · 部分资料待完善',
       education: '教育经历',
+      educationTags: '教育标签',
       emptyEducation: '教育经历将在补充后更新。',
       publications: '发表论文',
       cvProjects: '项目经历',
@@ -85,6 +86,7 @@
       projectExample: 'Example project',
       cvExample: 'CV draft · Some details are still to be added',
       education: 'Education',
+      educationTags: 'Education tags',
       emptyEducation: 'Education details will be added here.',
       publications: 'Publications',
       cvProjects: 'Projects',
@@ -316,17 +318,17 @@
                 .map(
                   (entry) => `
           <article class="education-entry">
-            <p class="education-period">${escape(text(entry.period)).replaceAll(' — ', '<br>— ')}</p>
+            <p class="education-period" title="${escape(text(entry.period))}">${escape(text(entry.timelinePeriod || entry.period)).replaceAll(' — ', '<br>— ')}</p>
             <div class="education-content">
               <div class="education-institution">
-                ${entry.logo ? `<img class="education-logo" src="${escape(entry.logo)}" alt="${escape(text(entry.school))}" width="48" height="48" loading="lazy">` : icon('academic')}
-                <div class="education-heading">
-                  <h3>${entry.url ? resourceLink(text(entry.school), entry.url) : escape(text(entry.school))}</h3>
-                  ${text(entry.status) ? `<p class="education-status">${escape(text(entry.status))}</p>` : ''}
-                </div>
+                <h3>${entry.logo
+                  ? `${entry.url ? `<a href="${escape(allowedUrl(entry.url))}" target="_blank" rel="noopener noreferrer">` : ''}<img class="education-logo" src="${escape(entry.logo)}" alt="${escape(text(entry.school))}" width="270" height="72">${entry.url ? '</a>' : ''}`
+                  : entry.url ? resourceLink(text(entry.school), entry.url) : escape(text(entry.school))}</h3>
+                ${text(entry.status) ? `<p class="education-status">${escape(text(entry.status))}</p>` : ''}
               </div>
               <p class="education-degree">${escape(text(entry.degree))}</p>
               ${(entry.details || []).map((detail) => `<p class="education-detail">${escape(text(detail))}</p>`).join('')}
+              ${entry.tags?.length ? `<ul class="education-tags" aria-label="${escape(ui.educationTags)}">${entry.tags.map((tag) => `<li>${escape(text(tag))}</li>`).join('')}</ul>` : ''}
             </div>
           </article>`
                 )
@@ -374,16 +376,16 @@
     const nav = document.getElementById('main-nav');
     nav.setAttribute('aria-label', ui.nav);
     nav.innerHTML = [
+      ['education', ui.navEducation],
       ['news', ui.navNews],
       ['research', ui.research],
       ['projects', ui.navProjects],
-      ['education', ui.navEducation],
       ['life', ui.life]
     ]
       .map(([id, label]) => `<a href="#${id}" data-section="${id}">${escape(label)}</a>`)
       .join('');
     mainElement.innerHTML =
-      renderNews() + renderResearch() + renderProjects() + renderEducation() + renderLife();
+      renderEducation() + renderNews() + renderResearch() + renderProjects() + renderLife();
     window.HomepageTravel.mount(document.getElementById('travel-map'), {
       language,
       visits: content.life?.travel || {},
@@ -430,7 +432,7 @@
 
   function pinNavigation(sectionId) {
     // Keep the clicked section selected while smooth scrolling or at the page end.
-    pinnedSection = sectionId === 'more' ? 'life' : sectionId === 'about' ? 'news' : sectionId;
+    pinnedSection = sectionId === 'more' ? 'life' : sectionId === 'about' ? 'education' : sectionId;
     updateNavigation();
   }
 
@@ -548,7 +550,7 @@
     const aboutLink = event.target.closest('a[href="#about"]');
     if (aboutLink) {
       event.preventDefault();
-      pinNavigation('news');
+      pinNavigation('education');
       window.scrollTo({
         top: 0,
         behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
@@ -622,7 +624,7 @@
       dialog.close();
   });
   topButton.addEventListener('click', () => {
-    pinNavigation('news');
+    pinNavigation('education');
     window.scrollTo({
       top: 0,
       behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'

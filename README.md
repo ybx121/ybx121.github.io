@@ -17,6 +17,8 @@ npm run dev
 修改 `dist/content.js`。中英文内容分别填写在 `zh` 和 `en` 字段中。
 
 - `profile` 包含姓名、学校专业、简介、邮箱、研究兴趣、社交账号和教育经历。教育经历同时显示在首页和简历中，支持院校图标、学校链接、时间、专业学位和补充说明。
+- 教育经历位于正文最前面，采用左侧时间轴、右侧学校标识与学位信息的布局。`profile.education[].timelinePeriod` 设置时间轴的简短年份，`period` 保留完整时间供简历与提示使用；`tags` 设置下方标签，当前为 `Computer Science`。添加更多教育条目时会自动沿同一时间轴排列。
+- 上海科技大学的校徽与校名组合标识来自[学校官网的标识文件](https://www.shanghaitech.edu.cn/_upload/tpl/00/20/32/template32/images/logo_red.svg)，本地文件为 `dist/assets/shanghaitech-logo.svg`，保留官方原色，用于标示教育单位。
 - `profile.emails` 保存邮箱列表，每项包含 `address` 和 `visible`。当前保留学校邮箱和新浪邮箱，只显示新浪邮箱；学校邮箱的 `visible` 为 `false`。将其改为 `true` 后，主页和简历就会显示两个邮箱，主页上的每个邮箱均有对应的复制按钮。
 - 将个人照片放入 `dist/assets/`，再修改 `profile.portrait`。
 - 有正式 PDF 简历时，将其放入 `dist/assets/`，把 `profile.cvUrl` 设置为 `assets/cv.pdf`。未设置时，简历按钮打开根据配置生成的可打印简历。
@@ -43,7 +45,7 @@ npm run dev
 
 `.github/workflows/pages.yml` 会在 `main` 分支收到提交后检查 JavaScript 语法并自动发布。仓库 Settings → Pages → Build and deployment → Source 应保持为 **GitHub Actions**，无需将 `dist/` 的文件再手动复制到仓库根目录。
 
-修改 `content.js` 或 `app.js` 后，同步更新 `dist/index.html` 中对应脚本 URL 的 `v` 版本标记，使浏览器及时加载更新后的文件。
+修改 `styles.css`、`content.js` 或 `app.js` 后，同步更新 `dist/index.html` 中对应样式或脚本 URL 的 `v` 版本标记，使浏览器及时加载更新后的文件。
 
 后续更新时，在本目录先运行：
 

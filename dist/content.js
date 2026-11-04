@@ -41,9 +41,11 @@ window.HOMEPAGE = {
           en: 'B.S. in Computer Science and Technology (in progress)'
         },
         period: { zh: '2023.09 — 2027.06', en: 'Sep 2023 — Jun 2027' },
+        timelinePeriod: '2023\n— 2027',
         status: { zh: '预计毕业 · 2027', en: 'Expected graduation · 2027' },
-        logo: '',
+        logo: 'assets/shanghaitech-logo.svg',
         url: 'https://www.shanghaitech.edu.cn/',
+        tags: ['Computer Science'],
         details: []
       }
     ]
