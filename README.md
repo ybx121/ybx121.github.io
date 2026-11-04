@@ -1,4 +1,4 @@
-# 清蓝个人主页
+# ybx121.github.io · 清蓝个人主页
 
 白底蓝色的中英双语个人主页。桌面端采用左侧个人资料、右侧纵向内容的布局，项目统一左图右文。手机端自动调整为单列。
 
@@ -33,7 +33,32 @@ npm run dev
 
 ## 发布到 GitHub Pages
 
-将 `dist/` 内的全部文件及文件夹放到你的主页仓库根目录，包括 `.nojekyll`。在仓库的 Pages 设置中选择对应分支的根目录发布。站点使用相对资源路径，也支持项目仓库子路径。
+线上地址为 <https://ybx121.github.io/>，源码仓库为 <https://github.com/ybx121/ybx121.github.io>。
+
+本机的编辑目录固定为 `E:\个人主页\outputs\personal-homepage`，在这里修改 `dist/content.js`、样式和图片。仓库保留整个源码目录结构，GitHub Pages 只发布 `dist/` 内的静态网站文件。
+
+`.github/workflows/pages.yml` 会在 `main` 分支收到提交后检查 JavaScript 语法并自动发布。仓库 Settings → Pages → Build and deployment → Source 应保持为 **GitHub Actions**，无需将 `dist/` 的文件再手动复制到仓库根目录。
+
+后续更新时，在本目录先运行：
+
+```sh
+npm run check
+git status --short
+git diff
+```
+
+确认改动后，只添加本次需要发布的文件。例如仅修改个人资料时：
+
+```sh
+git add dist/content.js
+git diff --cached
+git commit -m "feat(profile): update personal information"
+git push github main
+```
+
+修改样式、图片或其他文件时，把相应路径添加到 `git add`。提交使用 Conventional Commits；推送成功后，到仓库 Actions 查看 **Publish homepage to GitHub Pages** 工作流，成功后刷新网站即可。也可以在该工作流页面选择 **Run workflow** 手动重发。
+
+`github` 远程使用 `git@github.com:ybx121/ybx121.github.io.git`。Git 上传使用本机已有 SSH 配置；此仓库指定 Windows OpenSSH。原有 `.openai/hosting.json` 保留之前的 Sites 项目信息，GitHub Pages 的发布流程不依赖它。
 
 ## 当前示例内容
 
