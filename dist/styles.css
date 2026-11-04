@@ -503,6 +503,7 @@ ul {
 .education-list {
   --education-date-width: 64px;
   --education-track-gap: 34px;
+  --education-axis-x: calc(var(--education-date-width) + var(--education-track-gap) / 2);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -513,8 +514,9 @@ ul {
   position: absolute;
   top: 38px;
   bottom: 12px;
-  left: calc(var(--education-date-width) + var(--education-track-gap) / 2);
+  left: var(--education-axis-x);
   width: 2px;
+  transform: translateX(-50%);
   background: linear-gradient(var(--blue), #bed7ed 80%, transparent);
 }
 .education-entry {
@@ -528,9 +530,10 @@ ul {
   content: '';
   position: absolute;
   top: 32px;
-  left: calc(var(--education-date-width) + var(--education-track-gap) / 2 - 5px);
+  left: var(--education-axis-x);
   width: 12px;
   height: 12px;
+  transform: translateX(-50%);
   border: 3px solid var(--paper);
   border-radius: 50%;
   background: var(--blue);
