@@ -149,13 +149,16 @@
     }
   }
 
-  function resourceLink(label, value, className = '') {
+  function resourceLink(label, value, className = '', iconName = '') {
     const url = allowedUrl(value);
+    const escapedLabel = escape(label);
+    const linkContent = iconName ? icon(iconName) : escapedLabel;
+    const iconLabel = iconName ? ` aria-label="${escapedLabel}" title="${escapedLabel}"` : '';
     if (!url) {
-      return `<button type="button" class="text-button ${className}" data-action="missing" data-label="${escape(label)}">${escape(label)}</button>`;
+      return `<button type="button" class="text-button ${className}" data-action="missing" data-label="${escapedLabel}"${iconLabel}>${linkContent}</button>`;
     }
     const external = /^https?:/i.test(url);
-    return `<a class="${className}" href="${escape(url)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${escape(label)}</a>`;
+    return `<a class="${className}" href="${escape(url)}"${iconLabel}${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${linkContent}</a>`;
   }
 
   function heading(title, secondary = '') {
@@ -182,13 +185,7 @@
         <button type="button" class="icon-button copy-email" data-action="copy-email" data-email="${escape(email)}" aria-label="${escape(ui.copyEmail)}" title="${escape(ui.copyEmail)}">${icon('copy')}</button>
       </div>`).join('');
     const socialLinks = (profile.socials || [])
-      .map(
-        (social) => `
-      <div class="contact-row">
-        ${icon(social.icon || 'arrow')}
-        ${resourceLink(text(social.label), social.url)}
-      </div>`
-      )
+      .map((social) => resourceLink(text(social.label), social.url, 'social-link', social.icon || 'arrow'))
       .join('');
     const resume = allowedUrl(profile.cvUrl)
       ? `<a class="resume-button" href="${escape(profile.cvUrl)}" target="_blank" rel="noopener">${escape(ui.resume)} ${icon('arrow')}</a>`
@@ -211,9 +208,9 @@
       </div>
       <div class="profile-contacts">
         ${emailLinks}
-        ${socialLinks}
       </div>
-      <div class="profile-actions">${resume}</div>`;
+      <div class="profile-actions">${resume}</div>
+      ${socialLinks ? `<div class="profile-socials" role="group" aria-label="${language === 'zh' ? '账号与链接' : 'Accounts and links'}">${socialLinks}</div>` : ''}`;
   }
 
   function normalizeTimelineDate(value) {

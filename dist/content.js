@@ -30,7 +30,9 @@ window.HOMEPAGE = {
     ],
     socials: [
       { label: { zh: 'GitHub', en: 'GitHub' }, icon: 'github', url: 'https://github.com/ybx121' },
-      { label: { zh: '学术账号', en: 'Scholar' }, icon: 'academic', url: '' }
+      { label: { zh: '文章与笔记', en: 'Blog' }, icon: 'blog', url: '' },
+      { label: { zh: '抖音', en: 'Douyin' }, icon: 'douyin', url: '' },
+      { label: { zh: '小红书', en: 'Xiaohongshu' }, icon: 'xiaohongshu', url: '' }
     ],
     cvUrl: '',
     education: [

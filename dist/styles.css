@@ -298,8 +298,7 @@ ul {
 .contact-row > .icon {
   color: #6c83a0;
 }
-.contact-row a,
-.contact-row .text-button {
+.contact-row a {
   min-width: 0;
   overflow-wrap: anywhere;
 }
@@ -317,6 +316,30 @@ ul {
 }
 .profile-actions {
   margin-top: 28px;
+}
+.profile-socials {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+.social-link {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 8px;
+  color: var(--blue-dark);
+}
+.social-link .icon {
+  width: 24px;
+  height: 24px;
+}
+.social-link:hover,
+.social-link:focus-visible {
+  background: var(--blue-soft);
 }
 .resume-button {
   display: inline-flex;
@@ -1115,7 +1138,8 @@ ul {
   .profile-intro,
   .profile-interests,
   .profile-contacts,
-  .profile-actions {
+  .profile-actions,
+  .profile-socials {
     grid-column: 1 / -1;
   }
   .profile-intro {

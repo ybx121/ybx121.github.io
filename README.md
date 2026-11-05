@@ -17,6 +17,7 @@ npm run dev
 修改 `dist/content.js`。中英文内容分别填写在 `zh` 和 `en` 字段中。
 
 - `profile` 包含姓名、学校专业、简介、邮箱、研究兴趣、社交账号和教育经历。教育经历同时显示在首页和简历中，支持院校图标、学校链接、时间、专业学位和补充说明。
+- `profile.socials` 配置个人资料底部的 GitHub、文章与笔记、抖音和小红书图标。填写对应 `url` 即可启用跳转，留空的入口点击后会提示待添加链接。
 - 教育经历位于正文最前面，采用左侧时间轴、右侧学校标识与学位信息的布局。`profile.education[].timelinePeriod` 设置时间轴的简短年份，`period` 保留完整时间供简历与提示使用；`tags` 设置下方标签，当前为 `Computer Science`。添加更多教育条目时会自动沿同一时间轴排列。
 - 上海科技大学的校徽与校名组合标识来自[学校官网的标识文件](https://www.shanghaitech.edu.cn/_upload/tpl/00/20/32/template32/images/logo_red.svg)，本地文件为 `dist/assets/shanghaitech-logo.svg`，保留官方原色，用于标示教育单位。
 - `profile.emails` 保存邮箱列表，每项包含 `address` 和 `visible`。当前保留学校邮箱和新浪邮箱，只显示新浪邮箱；学校邮箱的 `visible` 为 `false`。将其改为 `true` 后，主页和简历就会显示两个邮箱，主页上的每个邮箱均有对应的复制按钮。
@@ -77,7 +78,7 @@ git push github main
 
 ## 当前示例内容
 
-姓名、学校、专业、邮箱、GitHub 和教育经历已填写为杨秉熹的资料。头像、简介、研究兴趣和学术账号仍待补充，因此保留部分资料待完善的说明。原先的动态、论文、项目和足球示例完整保存在 `dist/content.js` 的 `examples` 模板区，默认不显示。头像、足球场和框架图是本地 SVG，电脑配图是 AI 生成的示意素材。
+姓名、学校、专业、邮箱、GitHub 和教育经历已填写为杨秉熹的资料。头像、简介和研究兴趣仍待补充，因此保留部分资料待完善的说明。原先的动态、论文、项目和足球示例完整保存在 `dist/content.js` 的 `examples` 模板区，默认不显示。头像、足球场和框架图是本地 SVG，电脑配图是 AI 生成的示意素材。
 
 ## 文件
 
