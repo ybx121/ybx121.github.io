@@ -22,11 +22,12 @@ npm run dev
 - `profile.emails` 保存邮箱列表，每项包含 `address` 和 `visible`。当前保留学校邮箱和新浪邮箱，只显示新浪邮箱；学校邮箱的 `visible` 为 `false`。将其改为 `true` 后，主页和简历就会显示两个邮箱，主页上的每个邮箱均有对应的复制按钮。
 - 将个人照片放入 `dist/assets/`，再修改 `profile.portrait`。
 - 有正式 PDF 简历时，将其放入 `dist/assets/`，把 `profile.cvUrl` 设置为 `assets/cv.pdf`。未设置时，简历按钮打开根据配置生成的可打印简历。
-- `news` 填写近期动态，页面按日期倒序展示。超过六条时显示展开按钮。
+- `news` 填写近期动态。超过六条时显示展开按钮。
 - `publications` 只填写正式发表的论文。提供真实的作者顺序、发表信息和资源链接。
 - `projects` 填写项目简介和详情，各项目会自动上下排列。
 - `life.football` 填写足球介绍与配图。
-- `news`、`publications` 和 `projects` 目前为空数组，页面只显示对应标题，不显示待更新文案。将真实条目加入数组后会自动显示。
+- `news`、`publications` 和 `projects` 目前为空数组，页面只显示对应标题。添加真实条目后，左侧显示日期和时间轴，右侧显示内容，最新条目排在最上面。
+- 为条目填写 `date`，格式可用 `2026-11-05`、`2026-11` 或 `2026`。动态使用消息日期，论文使用发表日期，项目使用发布或完成日期。旧动态的 `datetime` 和点分日期（如 `2026.11`）也支持。日期相同的条目按填写顺序排列，缺少有效日期的条目排在最后。
 - `life.football` 的介绍、图片和图注目前留空，页面只显示“足球”标题。填写任一内容后会自动显示相应部分。
 - `examples.news`、`examples.publications`、`examples.projects` 和 `examples.football` 完整保留原先的示例，作为编辑模板。它们不参与页面或简历展示；需要时复制到对应正式字段，再改为真实内容。相关图片和交互功能均保留。
 - `life.travel.visitedProvinces` 填写去过的省级地区名称或六位行政区划代码，例如 `['浙江省', '110000']`。

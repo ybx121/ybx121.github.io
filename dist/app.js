@@ -216,24 +216,57 @@
       <div class="profile-actions">${resume}</div>`;
   }
 
+  function normalizeTimelineDate(value) {
+    const match = /^(\d{4})(?:[.-](\d{1,2})(?:[.-](\d{1,2}))?)?$/.exec(String(value ?? '').trim());
+    if (!match || match[1] === '0000') return '';
+    const [, year, month, day] = match;
+    const parts = [year, month?.padStart(2, '0'), day?.padStart(2, '0')];
+    const fullDate = [year, parts[1] || '01', parts[2] || '01'].join('-');
+    const calendarDate = new Date(`${fullDate}T00:00:00Z`);
+    return Number.isFinite(calendarDate.getTime()) && calendarDate.toISOString().startsWith(fullDate)
+      ? parts.filter(Boolean).join('-')
+      : '';
+  }
+
+  function newestFirst(items) {
+    return (items || [])
+      .map((item) => ({ item, date: normalizeTimelineDate(item.datetime) || normalizeTimelineDate(item.date) }))
+      .sort((first, second) => second.date.localeCompare(first.date));
+  }
+
+  function renderTimelineDate(date) {
+    if (!date) return '<span class="timeline-period"></span>';
+    const [year, ...monthAndDay] = date.split('-');
+    const label = [year, monthAndDay.join('.')].filter(Boolean).join('\n');
+    return `<time class="timeline-period" datetime="${date}" title="${date}">${label}</time>`;
+  }
+
+  function renderWorkTimeline(items, renderItem) {
+    if (!items?.length) return '';
+    const rows = newestFirst(items).map(({ item, date }) => `
+      <div class="timeline-entry">
+        ${renderTimelineDate(date)}
+        ${renderItem(item)}
+      </div>`).join('');
+    return `<div class="timeline-list">${rows}</div>`;
+  }
+
   function renderNews() {
     const ui = labels[language];
-    const news = [...(content.news || [])].sort((first, second) =>
-      second.date.localeCompare(first.date)
-    );
+    const news = newestFirst(content.news);
     const items = news
       .map(
-        (item, index) => `
-      <li${index >= 6 ? ` class="extra-news"${expandedNews ? '' : ' hidden'}` : ''}>
-        <time datetime="${escape(item.datetime || item.date.replaceAll('.', '-'))}">${escape(item.date)}</time>
-        <span>${item.target ? `<a href="#${escape(item.target)}">${escape(text(item.text))}</a>` : escape(text(item.text))}</span>
+        ({ item, date }, index) => `
+      <li class="timeline-entry${index >= 6 ? ' extra-news' : ''}"${index >= 6 && !expandedNews ? ' hidden' : ''}>
+        ${renderTimelineDate(date)}
+        <span class="news-copy">${item.target ? `<a href="#${escape(item.target)}">${escape(text(item.text))}</a>` : escape(text(item.text))}</span>
       </li>`
       )
       .join('');
     return `
       <section class="content-section" id="news">
         ${heading(ui.news)}
-        ${news.length ? `<ul class="news-list">${items}</ul>` : ''}
+        ${news.length ? `<ul class="timeline-list">${items}</ul>` : ''}
         ${news.length > 6 ? `<button class="text-button news-more" type="button" data-action="news" aria-expanded="${expandedNews}">${escape(expandedNews ? ui.showLess : ui.showAll)}</button>` : ''}
       </section>`;
   }
@@ -268,11 +301,10 @@
 
   function renderResearch() {
     const ui = labels[language];
-    const papers = content.publications || [];
     return `
       <section class="content-section" id="research">
         ${heading(ui.research, language === 'zh' ? 'Publications' : '')}
-        ${papers.length ? `<div class="publication-list">${papers.map(renderPublication).join('')}</div>` : ''}
+        ${renderWorkTimeline(content.publications, renderPublication)}
       </section>`;
   }
 
@@ -298,11 +330,10 @@
 
   function renderProjects() {
     const ui = labels[language];
-    const projects = content.projects || [];
     return `
       <section class="content-section" id="projects">
         ${heading(ui.projects)}
-        ${projects.length ? `<div class="project-list">${projects.map(renderProject).join('')}</div>` : ''}
+        ${renderWorkTimeline(content.projects, renderProject)}
       </section>`;
   }
 
@@ -314,11 +345,11 @@
         ${heading(ui.education)}
         ${
           education.length
-            ? `<div class="education-list">${education
+            ? `<div class="timeline-list">${education
                 .map(
                   (entry) => `
-          <article class="education-entry">
-            <p class="education-period" title="${escape(text(entry.period))}">${escape(text(entry.timelinePeriod || entry.period)).replaceAll(' — ', '<br>— ')}</p>
+          <article class="timeline-entry">
+            <p class="timeline-period" title="${escape(text(entry.period))}">${escape(text(entry.timelinePeriod || entry.period)).replaceAll(' — ', '<br>— ')}</p>
             <div class="education-content">
               <div class="education-institution">
                 <h3>${entry.logo
