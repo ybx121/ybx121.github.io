@@ -548,7 +548,7 @@ ul {
 .education-logo {
   width: 100%;
   height: auto;
-  max-width: 270px;
+  max-width: 240px;
   max-height: 75px;
   object-fit: contain;
   object-position: left center;
@@ -1291,7 +1291,7 @@ ul {
     font-size: 17px;
   }
   .education-logo {
-    max-width: 220px;
+    max-width: 195px;
   }
   .education-degree {
     margin-top: 18px;
