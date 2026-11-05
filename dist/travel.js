@@ -18,8 +18,7 @@
       zoomIn: '放大地图',
       zoomOut: '缩小地图',
       reset: '重置地图',
-      source: '底图',
-      islands: '南海诸岛'
+      source: '底图'
     },
     en: {
       china: 'China',
@@ -37,8 +36,7 @@
       zoomIn: 'Zoom in',
       zoomOut: 'Zoom out',
       reset: 'Reset map',
-      source: 'Map data',
-      islands: 'South China Sea islands'
+      source: 'Map data'
     }
   };
 
@@ -137,7 +135,6 @@
             aria-describedby="travel-map-hint">
             ${regions.map(renderRegion).join('')}
             ${map.decoration ? `<path class="map-decoration" d="${map.decoration}" aria-hidden="true"/>` : ''}
-            ${map.inset ? `<rect class="map-inset-frame" x="${map.inset[0]}" y="${map.inset[1]}" width="${map.inset[2]}" height="${map.inset[3]}" rx="1" aria-hidden="true"/><text class="map-inset-label" x="${map.inset[0] + map.inset[2] / 2}" y="${map.inset[1] + 15}" text-anchor="middle" aria-hidden="true">${escape(ui.islands)}</text>` : ''}
           </svg>
           <div class="map-bottom-controls">
             <label class="region-picker">

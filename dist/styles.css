@@ -725,19 +725,6 @@ ul {
   fill: #68798e;
   pointer-events: none;
 }
-.map-inset-frame {
-  fill: none;
-  stroke: #cad5e2;
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-  pointer-events: none;
-}
-.map-inset-label {
-  fill: #75869b;
-  font-size: 11px;
-  font-family: inherit;
-  pointer-events: none;
-}
 .map-bottom-controls {
   display: flex;
   align-items: center;

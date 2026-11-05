@@ -2,7 +2,7 @@
 
 ## 中国地图
 
-省级边界来自阿里云 DataV.GeoAtlas 公开地图数据接口。当前底图包含 34 个省级地区，并将南海诸岛放在附图中显示。地区标识采用来源数据中的六位行政区划代码。[DataV.GeoAtlas](https://datav.aliyun.com/portal/school/atlas/area_selector)
+省级边界来自阿里云 DataV.GeoAtlas 公开地图数据接口。旅行视图显示包含 34 个省级地区的主图。生成脚本跳过原先绘制在右下角附图中的多边形。地区标识采用来源数据中的六位行政区划代码。[DataV.GeoAtlas](https://datav.aliyun.com/portal/school/atlas/area_selector)
 
 原始数据地址为 [100000_full.json](https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json)，获取日期为 2026 年 11 月 4 日。
 
