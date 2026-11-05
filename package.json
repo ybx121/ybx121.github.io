@@ -4,8 +4,12 @@
   "private": true,
   "description": "A bilingual, blue academic homepage with an open two-column layout.",
   "scripts": {
-    "dev": "node preview.mjs",
-    "check": "node --check dist/content.js && node --check dist/app.js && node --check dist/travel.js && node --check dist/assets/maps.js && node --check preview.mjs && node --check verify-live.mjs",
+    "dev": "npm run build:blog && node preview.mjs",
+    "build:blog": "node build-blog.mjs",
+    "check": "node --check dist/content.js && node --check dist/app.js && node --check dist/travel.js && node --check dist/assets/maps.js && node --check build-blog.mjs && node --check preview.mjs && node --check verify-live.mjs",
     "verify:live": "node verify-live.mjs"
+  },
+  "dependencies": {
+    "markdown-it": "15.0.3"
   }
 }

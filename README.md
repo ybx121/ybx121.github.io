@@ -4,13 +4,14 @@
 
 ## 本地查看
 
-在本目录运行以下命令，然后打开终端显示的地址。
+首次预览先安装依赖，再运行预览命令并打开终端显示的地址。
 
 ```sh
+npm ci --ignore-scripts
 npm run dev
 ```
 
-无需安装 npm 依赖。也可以直接用浏览器打开 `dist/index.html`。邮箱和引用的复制功能需要 HTTPS 或本地 HTTP 预览环境。
+预览命令会先生成博客页面。邮箱和引用的复制功能需要 HTTPS 或本地 HTTP 预览环境。
 
 ## 替换个人内容
 
@@ -39,13 +40,34 @@ npm run dev
 
 资源链接留空时，点击会提示待添加。使用真实的 HTTPS 链接，或站点内文件的相对路径。新增条目时为每项设置唯一的 `id`。
 
+## 发布博客文章
+
+博客入口是 [文章与笔记](https://ybx121.github.io/blog/)。主页底部的笔形图标会打开博客。
+
+1. 在 `blog/posts/` 下新建 Markdown 文件，例如 `first-note.md`。直接写正文，正文内的小节可从 `##` 开始。
+2. 在 `blog/posts.json` 的数组里添加一条记录。`slug` 和 Markdown 文件名对应，只使用小写英文字母、数字和连字符。`date` 使用 `YYYY-MM-DD`。`summary` 和 `tags` 可以省略。
+
+   ```json
+   {
+     "slug": "first-note",
+     "title": "第一篇学习笔记",
+     "date": "2026-11-05",
+     "summary": "记录一次学习中的问题和收获。",
+     "tags": ["学习笔记"]
+   }
+   ```
+
+3. 运行 `npm run dev` 预览，确认后提交 Markdown 文件和清单并推送到 `main`。发布流程会生成文章页、标签和按年份整理的归档。
+
+文章配图可以放在 `dist/assets/`，在 Markdown 中引用 `/assets/图片文件名.png`。生成的 `dist/blog/index.html` 和 `dist/blog/posts/` 由构建脚本管理。
+
 ## 发布到 GitHub Pages
 
 线上地址为 <https://ybx121.github.io/>，源码仓库为 <https://github.com/ybx121/ybx121.github.io>。
 
 本机的编辑目录固定为 `E:\个人主页\outputs\personal-homepage`，在这里修改 `dist/content.js`、样式和图片。仓库保留整个源码目录结构，GitHub Pages 只发布 `dist/` 内的静态网站文件。
 
-`.github/workflows/pages.yml` 会在 `main` 分支收到提交后检查 JavaScript 语法并自动发布。仓库 Settings → Pages → Build and deployment → Source 应保持为 **GitHub Actions**，无需将 `dist/` 的文件再手动复制到仓库根目录。
+`.github/workflows/pages.yml` 会在 `main` 分支收到提交后检查 JavaScript 语法、生成博客并自动发布。仓库 Settings → Pages → Build and deployment → Source 应保持为 **GitHub Actions**，无需将 `dist/` 的文件再手动复制到仓库根目录。
 
 发布包按工作流运行编号和重试次数命名，上传与部署步骤使用同一名称，避免重试时出现多个同名发布包。
 
